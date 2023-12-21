@@ -1,7 +1,6 @@
 import { nanoid } from 'nanoid';
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../../redux/contactSlice';
+import { createContact } from '../../redux/contactSlice';
 import { selectContacts } from '../../redux/selectors';
 import css from './ContactForm.module.css';
 
@@ -9,18 +8,12 @@ export const ContactForm = () => {
     const contacts = useSelector(selectContacts);
     const dispatch = useDispatch();
     
-        useEffect(() => {
-        if (contacts) {
-            localStorage.setItem('contacts', JSON.stringify(contacts));
-        }
-        }, [contacts]);
-    
         const handleSubmit = e => {
         e.preventDefault();
     
         const form = e.currentTarget;
         const name = form.elements.name.value;
-        const number = form.elements.number.value;
+        const phone = form.elements.number.value;
         const id = nanoid();
         let exist = false;
     
@@ -34,7 +27,7 @@ export const ContactForm = () => {
         }
     
         if (!exist) {
-            dispatch(addContact({ id, name, number }));
+            dispatch(createContact ({ id, name, phone }));
         }
         e.target.reset();
         };
@@ -42,7 +35,7 @@ export const ContactForm = () => {
     return (
         <>
         <div className={css.form}>
-            <h2 className={css.form__title}>Phonebook</h2>
+            <h1 className={css.form__title}>Phonebook</h1>
             <form className={css.form__form} onSubmit={handleSubmit}>
             <label className={css.form__label} htmlFor="name">
                 Name
@@ -67,7 +60,7 @@ export const ContactForm = () => {
                 title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
                 required
             />
-            <button className={css.form__btn} type="submit">
+            <button className={css.form__btn}type="submit">
                 Add contact
             </button>
             </form>

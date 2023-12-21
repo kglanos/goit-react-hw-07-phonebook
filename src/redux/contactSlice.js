@@ -1,26 +1,54 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { nanoid } from 'nanoid';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const initialContacts = JSON.parse(localStorage.getItem('contacts')) ?? [
-  { id: nanoid(), name: 'Rosie Simpson', number: '459-12-56' },
-  { id: nanoid(), name: 'Hermione Kline', number: '443-89-12' },
-  { id: nanoid(), name: 'Eden Clements', number: '645-17-79' },
-  { id: nanoid(), name: 'Annie Copeland', number: '227-91-26' },
-];
+export const fetchContacts = createAsyncThunk('contacts/fetchContacts', 
+    async () => {
+        const response = await fetch('https://6584738a4d1ee97c6bcfc4f4.mockapi.io/kglanos/contacts');
+        const data = await response.json();
+        return data;
+    }
+);
 
-const contactSlice = createSlice({
-  name: 'contacts',
-  initialState: initialContacts,
-  reducers: {
-    addContact: (state, action) => {
-      const newState = Array.isArray(state) ? state : [];
-      return newState.concat(action.payload);
+export const createContact = createAsyncThunk('contacts/createContact', 
+    async (contact) => {
+        const response = await fetch('https://6584738a4d1ee97c6bcfc4f4.mockapi.io/kglanos/contacts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(contact)
+        });
+        const data = await response.json();
+        return data;
+    }
+);
+
+export const deleteContact = createAsyncThunk('contacts/deleteContact',
+    async (contactId) => {
+        await fetch(`https://6584738a4d1ee97c6bcfc4f4.mockapi.io/kglanos/contacts/${contactId}`, {
+            method: 'DELETE'
+        });
+        return contactId;
+    }
+);
+
+const initialContacts = [];
+
+const contactsSlice = createSlice({
+    name: 'contacts',
+    initialState: initialContacts,
+    reducers: {},
+    extraReducers: (builder) => {
+      builder
+        .addCase(fetchContacts.fulfilled, (state, action) => {
+            return action.payload;
+        })
+        .addCase(createContact.fulfilled, (state, action) => {
+            state.push(action.payload);
+        })
+        .addCase(deleteContact.fulfilled, (state, action) => {
+            return state.filter(contact => contact.id !== action.payload);
+        });
     },
-    deleteContact: (state, action) => {
-      return state.filter(contact => contact.id !== action.payload);
-    },
-  },
 });
 
-export const { addContact, deleteContact } = contactSlice.actions;
-export const contactReducer = contactSlice.reducer;
+export const { reducer: contactsReducer } = contactsSlice;
