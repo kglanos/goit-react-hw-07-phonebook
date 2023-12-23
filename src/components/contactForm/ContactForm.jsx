@@ -13,7 +13,7 @@ export const ContactForm = () => {
     
         const form = e.currentTarget;
         const name = form.elements.name.value;
-        const phone = form.elements.number.value;
+        const number = form.elements.number.value;
         const id = nanoid();
         let exist = false;
     
@@ -27,7 +27,7 @@ export const ContactForm = () => {
         }
     
         if (!exist) {
-            dispatch(addAsyncContact ({ id, name, phone }));
+            dispatch(addAsyncContact ({ id, name, number }));
         }
         e.target.reset();
         };

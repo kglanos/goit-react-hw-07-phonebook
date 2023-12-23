@@ -32,14 +32,12 @@ import { selectContacts, selectFilterValue } from '../../redux/selectors';
     <div className={css.contacts}>
       <h2>Contacts</h2>
       <ul className={css.contacts__list}>
-        {filteredContacts.map(contact => (
-          <li className={css.contacts__item} key={contact.id || contact.name}>
-            {contact.name} : {contact.phone}{' '}
-            <button
-              onClick={() => dispatch(deleteContactById(contact.id))}
-            >
-              Delete
-            </button>
+  {filteredContacts.map(contact => (
+    <li className={css.contacts__item} key={JSON.stringify(contact)}>
+      {contact.name} : {contact.phone}{' '}
+      <button onClick={() => dispatch(deleteContactById(contact.id))}>
+        Delete
+      </button>
           </li>
         ))}
       </ul>

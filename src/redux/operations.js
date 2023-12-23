@@ -22,7 +22,7 @@ axios.defaults.baseURL = 'https://6584738a4d1ee97c6bcfc4f4.mockapi.io/kglanos';
                 const response = await axios.post('/contacts', {
                 id: id,
                 name: name,
-                number: number,
+                phone: number,
                 });
                 return response.data;
             } catch (error) {
@@ -33,10 +33,10 @@ axios.defaults.baseURL = 'https://6584738a4d1ee97c6bcfc4f4.mockapi.io/kglanos';
     
     export const deleteAsyncContact = createAsyncThunk(
         'contacts/deleteAsyncContact',
-            async (contactId, thunkAPI) => {
+        async (contactId, thunkAPI) => {
             try {
-                const response = await axios.delete(`/contacts/${contactId}`);
-                return response.data;
+                await axios.delete(`/contacts/${contactId}`);
+                return contactId;
             } catch (error) {
                 return thunkAPI.rejectWithValue(error.message);
             }
