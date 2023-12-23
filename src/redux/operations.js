@@ -15,7 +15,7 @@ axios.defaults.baseURL = 'https://6584738a4d1ee97c6bcfc4f4.mockapi.io/kglanos';
         }
     );
     
-    export const createContact = createAsyncThunk(
+    export const addAsyncContact = createAsyncThunk(
         'contacts/addAsyncContact',
         async ({ id, name, number }, thunkAPI) => {
             try {
@@ -31,7 +31,7 @@ axios.defaults.baseURL = 'https://6584738a4d1ee97c6bcfc4f4.mockapi.io/kglanos';
         }
     );
     
-    export const deleteContact = createAsyncThunk(
+    export const deleteAsyncContact = createAsyncThunk(
         'contacts/deleteAsyncContact',
             async (contactId, thunkAPI) => {
             try {

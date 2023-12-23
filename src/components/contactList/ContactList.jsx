@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import css from './ContactList.module.css';
-import { fetchContacts, deleteContact } from '../../redux/operations';
+import { fetchContacts, deleteAsyncContact } from '../../redux/operations';
 import { selectContacts, selectFilterValue } from '../../redux/selectors';
 
   export const ContactList = () => {
@@ -20,9 +20,9 @@ import { selectContacts, selectFilterValue } from '../../redux/selectors';
     dispatch(fetchContacts());
   }, [dispatch]);
 
-  const handleDeleteContact = async (contactId) => {
+  const deleteContactById = async contactId => {
     try {
-      await dispatch(deleteContact(contactId));
+      await dispatch(deleteAsyncContact(contactId));
     } catch (error) {
       console.error('Error deleting contact:', error.message);
     }
@@ -33,10 +33,10 @@ import { selectContacts, selectFilterValue } from '../../redux/selectors';
       <h2>Contacts</h2>
       <ul className={css.contacts__list}>
         {filteredContacts.map(contact => (
-          <li className={css.contacts__item} key={contact.id}>
+          <li className={css.contacts__item} key={contact.id || contact.name}>
             {contact.name} : {contact.phone}{' '}
             <button
-              onClick={() => handleDeleteContact(contact.id)}
+              onClick={() => dispatch(deleteContactById(contact.id))}
             >
               Delete
             </button>

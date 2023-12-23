@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-import { createContact } from '../../redux/operations';
+import { addAsyncContact } from '../../redux/operations';
 import { selectContacts } from '../../redux/selectors';
 import css from './ContactForm.module.css';
 
@@ -27,7 +27,7 @@ export const ContactForm = () => {
         }
     
         if (!exist) {
-            dispatch(createContact ({ id, name, phone }));
+            dispatch(addAsyncContact ({ id, name, phone }));
         }
         e.target.reset();
         };
